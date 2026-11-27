@@ -1,34 +1,4 @@
-import os
 import dearpygui.dearpygui as dpg
-
-
-def _apply_material3_style():
-    dpg.add_theme_style(dpg.mvStyleVar_WindowRounding, 10)
-    dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 12)
-    dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 6)
-    dpg.add_theme_style(dpg.mvStyleVar_PopupRounding, 8)
-    dpg.add_theme_style(dpg.mvStyleVar_ScrollbarRounding, 8)
-    dpg.add_theme_style(dpg.mvStyleVar_GrabRounding, 8)
-    dpg.add_theme_style(dpg.mvStyleVar_TabRounding, 8)
-
-    dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, 16, 16)
-    dpg.add_theme_style(dpg.mvStyleVar_FramePadding, 12, 7)
-    dpg.add_theme_style(dpg.mvStyleVar_ItemSpacing, 10, 8)
-    dpg.add_theme_style(dpg.mvStyleVar_ScrollbarSize, 10)
-    dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 0)
-    dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 0)
-    dpg.add_theme_style(dpg.mvStyleVar_WindowBorderSize, 0)
-    dpg.add_theme_style(dpg.mvStyleVar_PopupBorderSize, 0)
-    dpg.add_theme_style(dpg.mvStyleVar_TabBarBorderSize, 0)
-
-
-def create_theme_from_palette(palette: dict) -> int:
-    with dpg.theme() as theme_id:
-        with dpg.theme_component(dpg.mvAll):
-            for col_const, rgba in palette.items():
-                dpg.add_theme_color(col_const, rgba)
-            _apply_material3_style()
-    return theme_id
 
 
 def _rgba(rgb: tuple[int, int, int], a: int = 255) -> tuple[int, int, int, int]:
@@ -131,46 +101,6 @@ PALETTES = {
         button_hovered=(216, 198, 250),
         tertiary=(125, 82, 96),
     ),
-    "Material 3 Blue Dark": _build_m3_palette(
-        is_dark=True,
-        surface=(18, 20, 24),
-        container=(26, 29, 35),
-        frame=(38, 42, 50),
-        primary=(168, 199, 250),
-        button=(8, 66, 160),
-        button_hovered=(11, 87, 208),
-        tertiary=(127, 213, 198),
-    ),
-    "Material 3 Blue Light": _build_m3_palette(
-        is_dark=False,
-        surface=(248, 250, 255),
-        container=(238, 243, 252),
-        frame=(225, 232, 245),
-        primary=(11, 87, 208),
-        button=(211, 227, 253),
-        button_hovered=(184, 210, 250),
-        tertiary=(20, 108, 46),
-    ),
-    "Material 3 Green Dark": _build_m3_palette(
-        is_dark=True,
-        surface=(18, 21, 18),
-        container=(26, 30, 26),
-        frame=(38, 44, 38),
-        primary=(156, 214, 125),
-        button=(32, 81, 22),
-        button_hovered=(56, 106, 32),
-        tertiary=(160, 207, 208),
-    ),
-    "Material 3 Green Light": _build_m3_palette(
-        is_dark=False,
-        surface=(248, 251, 244),
-        container=(238, 244, 233),
-        frame=(225, 234, 219),
-        primary=(56, 106, 32),
-        button=(183, 243, 151),
-        button_hovered=(162, 228, 130),
-        tertiary=(25, 104, 106),
-    ),
     "Material 3 Rose Dark": _build_m3_palette(
         is_dark=True,
         surface=(23, 18, 20),
@@ -233,51 +163,71 @@ PALETTES = {
     ),
 }
 
-
 DEFAULT_THEME = "Material 3 Dark"
-DEFAULT_FONT_SIZE = 15
 
-
-def _load_default_font(size: int = DEFAULT_FONT_SIZE) -> int | str | None:
-    """テーマ標準の合成フォント（未存在時はシステムフォント）を登録して返す。"""
-    merged_font_path = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "fonts", "RobotoNotoJP-Regular.ttf"
-    )
-    system_font_path = os.path.join(
-        os.environ.get("WINDIR", r"C:\Windows"), "Fonts", "Roboto-Regular.ttf"
-    )
-    font_path = merged_font_path if os.path.exists(merged_font_path) else system_font_path
-    if not os.path.exists(font_path):
-        return None
-    with dpg.font_registry():
-        return dpg.add_font(font_path, size)
-
-
-class ThemeManager:
-    """Material 3 テーマ（配色・スタイル・フォント）の生成・切り替えを管理するクラス。"""
-
-    def __init__(self, default_name: str = DEFAULT_THEME, font_size: int = DEFAULT_FONT_SIZE):
-        self._font = _load_default_font(font_size)
-        if self._font is not None:
-            dpg.bind_font(self._font)
-
-        self._themes: dict[str, int] = {
-            name: create_theme_from_palette(palette)
-            for name, palette in PALETTES.items()
-        }
-        self.default_name = (
-            default_name if default_name in self._themes else next(iter(self._themes))
-        )
-        self.current_name = self.default_name
-
-    @property
-    def names(self) -> list[str]:
-        return list(self._themes.keys())
-
-    def apply(self, name: str | None = None) -> None:
-        """指定したテーマ（未指定時はデフォルトテーマ）を適用する。"""
-        target = name or self.default_name
-        theme_id = self._themes.get(target, 0)
-        if theme_id != 0:
-            self.current_name = target
-        dpg.bind_theme(theme_id)
+PLOT_COLORMAPS: dict[str, list[tuple[int, int, int, int]]] = {
+    "Material 3 Dark": [
+        (208, 188, 255, 255),
+        (239, 184, 200, 255),
+        (136, 214, 204, 255),
+        (168, 199, 250, 255),
+        (245, 198, 120, 255),
+        (166, 217, 148, 255),
+    ],
+    "Material 3 Light": [
+        (103, 80, 164, 255),
+        (125, 82, 96, 255),
+        (0, 106, 102, 255),
+        (43, 98, 184, 255),
+        (140, 92, 16, 255),
+        (56, 110, 44, 255),
+    ],
+    "Material 3 Rose Dark": [
+        (255, 177, 200, 255),
+        (239, 189, 148, 255),
+        (208, 188, 255, 255),
+        (146, 214, 196, 255),
+        (164, 202, 245, 255),
+        (235, 212, 134, 255),
+    ],
+    "Material 3 Rose Light": [
+        (152, 64, 97, 255),
+        (124, 86, 53, 255),
+        (103, 80, 164, 255),
+        (26, 108, 96, 255),
+        (54, 96, 168, 255),
+        (122, 102, 24, 255),
+    ],
+    "Material 3 Amber Dark": [
+        (245, 191, 72, 255),
+        (169, 209, 142, 255),
+        (239, 184, 168, 255),
+        (138, 210, 214, 255),
+        (204, 186, 248, 255),
+        (244, 168, 196, 255),
+    ],
+    "Material 3 Amber Light": [
+        (125, 87, 0, 255),
+        (68, 103, 50, 255),
+        (156, 66, 52, 255),
+        (12, 104, 114, 255),
+        (102, 78, 158, 255),
+        (148, 62, 96, 255),
+    ],
+    "Material 3 Monochrome Dark": [
+        (242, 242, 242, 255),
+        (208, 208, 208, 255),
+        (176, 176, 176, 255),
+        (144, 144, 144, 255),
+        (116, 116, 116, 255),
+        (88, 88, 88, 255),
+    ],
+    "Material 3 Monochrome Light": [
+        (28, 28, 28, 255),
+        (62, 62, 62, 255),
+        (96, 96, 96, 255),
+        (126, 126, 126, 255),
+        (154, 154, 154, 255),
+        (182, 182, 182, 255),
+    ],
+}
