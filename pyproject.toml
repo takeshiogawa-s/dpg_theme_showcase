@@ -1,0 +1,9 @@
+[project]
+name = "dpg-theme-showcase"
+version = "0.1.0"
+description = "Dear PyGui custom themes showcase"
+requires-python = ">=3.10"
+dependencies = [
+    "dearpygui>=2.0.0",
+    "psutil>=7.2.2",
+]
