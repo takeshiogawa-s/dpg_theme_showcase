@@ -1,6 +1,6 @@
 # Dear PyGui Theme Showcase
 
-Dear PyGui 向けの **Material 3（Material You）** カスタムテーマをリアルタイムに切り替えて確認できる最小構成のショーケースプロジェクトです。
+Dear PyGui 向けの **Material 3** カスタムテーマです。
 ![alt text](image.png)
 ## 特徴
 - **Material 3 カラーパレット（全 8 種）**: Baseline（Purple）/ Rose / Amber / Monochrome の各 Dark・Light テーマを収録
