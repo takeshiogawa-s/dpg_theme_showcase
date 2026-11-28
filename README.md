@@ -1,15 +1,12 @@
 # Dear PyGui Theme Showcase
 
 Dear PyGui 向けの **Material 3** カスタムテーマです。
-![alt text](image.png)
+![Material 3 Themes Preview](themes_preview.png)
+
 ## 特徴
 - **Material 3 カラーパレット（全 8 種）**: Baseline（Purple）/ Rose / Amber / Monochrome の各 Dark・Light テーマを収録
 - **日英ハイブリッドフォント同梱**: `Roboto`（欧文）＋ `Noto Sans JP`（和文）の合成フォントを `ThemeManager` で一括適用
 - **最小依存**: 外部パッケージは `dearpygui` のみ（グラフ更新も標準ライブラリのランダム生成によるダミーデータで動作）
-
-## 収録テーマ（全 8 種）
-
-![Material 3 Themes Preview](themes_preview.png)
 
 ## 起動方法
 
